@@ -19,7 +19,7 @@ class ErthQuickFetcher {
         val retrofit: Retrofit = Retrofit.
         Builder()
             .baseUrl("https://earthquake.usgs.gov/fdsnws/event/1/")
-            .addConverterFactory(
+             .addConverterFactory(
                 GsonConverterFactory.create()
             ).build()
         erthApi = retrofit.create(ErthQuckApi::class.java)
@@ -28,8 +28,8 @@ class ErthQuickFetcher {
         val responseLiveData: MutableLiveData<List<ErthData>> = MutableLiveData()
         val erthRequest: Call<ErthResponse> = erthApi.fetchContents()
         erthRequest.enqueue(object : Callback <ErthResponse> {
- override fun onFailure(call: Call<ErthResponse>, t: Throwable) {
-             Log.e(TAG, "Failed to fetch photos", t)            }
+ override fun onFailure(call: Call<ErthResponse>,t: Throwable) {
+             Log.e(TAG, "Failed to fetch erthItems", t)            }
   override fun onResponse(
                 call: Call<ErthResponse>,
                 response: Response<ErthResponse>
