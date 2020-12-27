@@ -67,22 +67,24 @@ class ErthQuickFragment : Fragment() {
             itemTextView.setOnClickListener(this)
         }
 
-        @RequiresApi(Build.VERSION_CODES.N)
+       @RequiresApi(Build.VERSION_CODES.N)
         fun bind(erthdate: ErthData) {
-         //   var date = milliscondToDate(erthdate.properties.time)
+            var date = milliscondToDate(erthdate.properties.time)
            var time = milliscondToTime(erthdate.properties.time)
-           var date1 = getDate(erthdate.properties.time, "MMM DD, yyyy")
-            dateTextView.text=date1
-           timeTextView.text=time
+        //   var date1 = getDate(erthdate.properties.time, "MMM DD, yyyy")
+         dateTextView.text=date
+          timeTextView.text=time
+            cordnate = erthdate.geometry.coordinates
             val string = erthdate.properties.place
             val parts = string.split("of".toRegex()).toTypedArray()
             val address = parts[0] // 2km NNW
             val country = parts[1] // Palomar Observatory
             placeTextView.setText(country)
             countryTextView.setText(address)
+
             var mag = erthdate.properties.mag
 
-            magTextView.setText(mag.toString())
+            magTextView.text=mag.toString()
             when {
                 mag in 2.0..3.9 -> magTextView.setBackgroundResource(R.drawable.round_shape)
                 mag in 4.0..4.9 -> magTextView.setBackgroundResource(R.drawable.round_yellow_shape)
@@ -90,7 +92,7 @@ class ErthQuickFragment : Fragment() {
                 mag in 6.0..10.0 -> magTextView.setBackgroundResource(R.drawable.round_red_shape)
                 else -> magTextView.setBackgroundResource(R.drawable.round_shape)
             }
-            cordnate = erthdate.geometry.coordinates
+
 
 
         }
@@ -106,41 +108,41 @@ class ErthQuickFragment : Fragment() {
         }
 
 
-        @RequiresApi(Build.VERSION_CODES.N)
-        private fun formatMag(mag: Double): String? {
-            val magFormat = DecimalFormat("0.0")
-            return magFormat.format(mag)
-        }
-//        @SuppressLint("SimpleDateFormat")
 //        @RequiresApi(Build.VERSION_CODES.N)
-//        fun milliscondToDate(Datemilli: Long) : String {
-//            val timeInMilliseconds = Datemilli
-//            val dateObject = Date(timeInMilliseconds)
-//            val dateFormatter = SimpleDateFormat("MM d, yyyy")
-//            var dateToDisplay: String = dateFormatter.format(dateObject)
-//            return dateToDisplay
+//        private fun formatMag(mag: Double): String? {
+//            val magFormat = DecimalFormat("0.0")
+//            return magFormat.format(mag)
 //        }
+   @SuppressLint("SimpleDateFormat")
+        @RequiresApi(Build.VERSION_CODES.N)
+        fun milliscondToDate(Datemilli: Long) : String {
+            val timeInMilliseconds = Datemilli
+            val dateObject = Date(timeInMilliseconds)
+            val dateFormatter =java.text.SimpleDateFormat("MM d, yyyy")
+            var dateToDisplay: String = dateFormatter.format(dateObject)
+            return dateToDisplay
+        }
       @SuppressLint("SimpleDateFormat")
         @RequiresApi(Build.VERSION_CODES.N)
         fun milliscondToTime(Datemilli: Long) : String {
             val timeInMilliseconds = Datemilli
             val dateObject = Date(timeInMilliseconds)
-            val timeFormatter = SimpleDateFormat("hh:mm a")
+            val timeFormatter = java.text.SimpleDateFormat("hh:mm a")
             val timeToDisplay: String = timeFormatter.format(dateObject)
             return timeToDisplay
         }
-
-
-        @SuppressLint("SimpleDateFormat")
-        @RequiresApi(Build.VERSION_CODES.N)
-        fun getDate(milliSeconds: Long, dateFormat: String?): String? {
-            // Create a DateFormatter object for displaying date in specified format.
-            var formatter = SimpleDateFormat(dateFormat)
-           // Create a calendar object that will convert the date and time value in milliseconds to date.
-            var calendar = Calendar.getInstance()
-            calendar.timeInMillis = milliSeconds
-            return formatter.format(calendar.time)
-        }
+//
+//
+//        @SuppressLint("SimpleDateFormat")
+//        @RequiresApi(Build.VERSION_CODES.N)
+//        fun getDate(milliSeconds: Long, dateFormat: String?): String? {
+//            // Create a DateFormatter object for displaying date in specified format.
+//            var formatter = SimpleDateFormat(dateFormat)
+//           // Create a calendar object that will convert the date and time value in milliseconds to date.
+//            var calendar = Calendar.getInstance()
+//            calendar.timeInMillis = milliSeconds
+//            return formatter.format(calendar.time)
+//        }
 
 
 
@@ -159,12 +161,14 @@ class ErthQuickFragment : Fragment() {
             return ErthHolder(v)
         }
         override fun getItemCount(): Int = erthItems.size
-      //  @RequiresApi(Build.VERSION_CODES.N)
+      @RequiresApi(Build.VERSION_CODES.N)
         override fun onBindViewHolder(holder: ErthHolder, position: Int) {
             val erthItems = erthItems[position]
-          if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+         Log.d(TAG, "Have  $erthItems")
+      //    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
               holder.bind(erthItems)
-          }
+
+         // }
       }
     }
 
